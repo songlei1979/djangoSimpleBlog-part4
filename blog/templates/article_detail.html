@@ -7,11 +7,15 @@
     </small><br/>
     <hr>
     <br/>
-    {{ post.body }}
+    {{ post.body | safe }}
 
     <br/><br/>
-    <a href="{% url 'update-post' post.pk %}" class="btn btn-secondary">Edit</a>
-    <a href="{% url 'delete-post' post.pk %}" class="btn btn-secondary">Delete</a>
+    {% if user.is_authenticated %}
+        {% if user.id == post.auther.id %}
+            <a href="{% url 'update-post' post.pk %}" class="btn btn-secondary">Edit</a>
+            <a href="{% url 'delete-post' post.pk %}" class="btn btn-secondary">Delete</a>
+        {% endif %}
+    {% endif %}
     <a href="{% url 'home' %}" class="btn btn-secondary">Back</a>
 
 {% endblock %}

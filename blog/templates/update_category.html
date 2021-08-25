@@ -1,23 +1,16 @@
 {% extends 'base.html' %}
-{% block title %}Add Post{% endblock %}
-
+{% block title %}Edit Category{% endblock %}
 {% block content %}
-
     {% if user.is_authenticated %}
-        <h1>Add Post</h1>
+        <h1>Update Category</h1>
         <div class="form-group">
             <form method="post">
                 {% csrf_token %}
                 {{ form.as_p }}
-                <button class="btn btn-secondary">Post</button>
+                <button class="btn btn-secondary">Update</button>
             </form>
 
         </div>
-
-        <script>
-            var name = "{{ user.id }}";
-            document.getElementById("userinput").value = name;
-        </script>
     {% else %}
         You are not allowed here!
     {% endif %}

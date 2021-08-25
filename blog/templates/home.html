@@ -6,13 +6,21 @@
     <ul>
         {% for post in object_list %}
             <li><a href="{% url 'article-detail' post.pk %}">{{ post.title }}</a>
+                - <a href="{% url 'category-detail' post.category.id %}">{{ post.category.name }}</a>
                 - {{ post.auther.first_name }}
                 - {{ post.post_date }}
-                - <a href="{% url 'update-post' post.pk %}" class="btn btn-secondary">Edit</a>
-                - <a href="{% url 'delete-post' post.pk %}" class="btn btn-secondary">Delete</a>
+                {% if user.is_authenticated %}
+                    {% if user.id == post.auther.id %}
+                        - <a href="{% url 'update-post' post.pk %}" class="btn btn-secondary">Edit</a>
+                        - <a href="{% url 'delete-post' post.pk %}" class="btn btn-secondary">Delete</a>
+                    {% endif %}
+                {% endif %}
                 <br/>
-                {{ post.body }}
+                {#                {{ post.body }}#}
+                {{ post.body|slice:":200" | safe }}
             </li>
         {% endfor %}
     </ul>
+
+    {{ cat_menu }}
 {% endblock %}
