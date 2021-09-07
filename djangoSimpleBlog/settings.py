@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/3.2/ref/settings/
 """
 import os
 from pathlib import Path
+import django_heroku
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -25,7 +26,8 @@ SECRET_KEY = 'django-insecure-k)g+@las0#1wvo#s*^!d8cqi!t$y7#h-(lz9zd(uw2cm_!(%)8
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
+CORS_ORIGIN_ALLOW_ALL=True
 
 
 # Application definition
@@ -40,6 +42,7 @@ INSTALLED_APPS = [
     'blog',
     'members',
     'ckeditor',
+    'corsheaders',
 ]
 
 MIDDLEWARE = [
@@ -78,13 +81,23 @@ WSGI_APPLICATION = 'djangoSimpleBlog.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/3.2/ref/settings/#databases
 
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.sqlite3',
+#         'NAME': BASE_DIR / 'db.sqlite3',
+#     }
+# }
+
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.postgresql',
+            'NAME': 'd74n15lbs862iu',
+            'USER': 'qvrwhmblakblra',
+            'PASSWORD': 'c7d53f2d23264705a0ca5d9064f84c4d5bb3c8432f17d49ef2723459b5b30b4c',
+            'HOST': 'ec2-34-228-100-83.compute-1.amazonaws.com',
+            'PORT': '5432',
     }
 }
-
 
 # Password validation
 # https://docs.djangoproject.com/en/3.2/ref/settings/#auth-password-validators
@@ -137,3 +150,5 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 LOGIN_REDIRECT_URL = 'home'
 LOGOUT_REDIRECT_URL = 'home'
+
+django_heroku.settings(locals())
