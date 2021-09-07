@@ -2,8 +2,8 @@ from django.shortcuts import render, get_object_or_404
 from django.urls import reverse_lazy, reverse
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
 # Create your views here.
-from blog.models import Post, Category
-from .forms import PostForm, EditForm
+from blog.models import Post, Category, Profile, Comment
+from .forms import PostForm, EditForm, AddCommentForm
 from django.http import HttpResponseRedirect
 
 
@@ -49,7 +49,6 @@ class UpdatePostView(UpdateView):
     template_name = 'update_post.html'
     # fields = ['title', 'title_tag', 'body']
 
-
 class DeletePostView(DeleteView):
     model = Post
     template_name = 'delete_post.html'
@@ -90,3 +89,24 @@ def LikeView(request, pk):
         post.likes.add(request.user)
         liked = True
     return HttpResponseRedirect(reverse('article-detail', args=[str(pk)]))
+
+class AddCommentView(CreateView):
+    model = Comment
+    form_class = AddCommentForm
+    template_name = 'add_comment.html'
+
+    def form_valid(self, form):
+        form.instance.post_id = self.kwargs['pk']
+        return super().form_valid((form))
+
+    # success_url = reverse_lazy('/article-detail/'+str(getPostID()))
+
+def search_post(request):
+    if request.method == 'POST':
+        search_target = request.POST['search_target']
+        posts = Post.objects.filter(title__contains=search_target)
+        return render(request, 'searchresult.html',
+                      {'search_target':search_target,
+                       'posts':posts})
+    else:
+        return render(request, 'searchresult.html', {})

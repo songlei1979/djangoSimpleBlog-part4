@@ -35,9 +35,32 @@
                     <li class="nav-item">
                         <a class="nav-link" href="{% url 'add-category' %}">Add Category</a>
                     </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="{% url 'edit_profile' %}">Edit Profile</a>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
+                           data-bs-toggle="dropdown" aria-expanded="false">
+                            Profile
+                        </a>
+                        <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+
+                            <li><a class="dropdown-item" href="{% url 'edit_profile' %}">Edit Settings</a>
+                            </li>
+                            {% if user.profile.id %}
+                                <li><a class="dropdown-item" href="{% url 'show_profile_page' user.profile.id %}">Show
+                                    Profile</a>
+                                </li>
+
+                                <li><a class="dropdown-item" href="{% url 'eidt_profile_page' user.profile.id %}">Edit
+                                    Profile</a>
+                                </li>
+                            {% else %}
+                                <li><a class="dropdown-item" href="{% url 'create_profile_page' %}">Create
+                                    Profile</a>
+                                </li>
+                            {% endif %}
+
+                        </ul>
                     </li>
+
                     <li class="nav-item">
                         <a class="nav-link" href="{% url 'logout' %}">Logout</a>
                     </li>
@@ -49,9 +72,9 @@
                         <a class="nav-link" href="{% url 'login' %}">Login</a>
                     </li>
                 {% endif %}
-            <li class="nav-item">
-                        <a class="nav-link" href="{% url 'category-list' %}">Category List</a>
-                    </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'category-list' %}">Category List</a>
+                </li>
                 <!-- Category Menu Code -->
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
@@ -74,10 +97,20 @@
                 {#          <a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true">Disabled</a>#}
                 {#        </li>#}
             </ul>
-            <form class="d-flex">
-                <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
+            <form class="d-flex" method="post" action="{% url 'search_post' %}">
+                {% csrf_token %}
+                <input class="form-control me-2" type="search" placeholder="Search Post" aria-label="Search" name="search_target">
                 <button class="btn btn-outline-success" type="submit">Search</button>
             </form>
+        <ul class="navbar-nav ml-auto">
+            <li class="nav-item">
+                {% if user.is_authenticated %}
+                <a class="nav-link" href="{% url 'show_profile_page' user.profile.id %}">{{ user.first_name }}</a>
+                {% else %}
+                <a class="nav-link" href="{% url 'login' %}">Login</a>
+                {% endif %}
+            </li>
+        </ul>
         </div>
     </div>
 </nav>
